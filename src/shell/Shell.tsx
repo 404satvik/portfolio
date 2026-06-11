@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
 import { parse } from "./parse";
+import { suggest } from "./suggest";
 import { commands, findCommand } from "../commands/index";
 import { ChipBar } from "../components/ChipBar";
 import type { CommandContext } from "../lib/types";
@@ -21,10 +22,24 @@ function Prompt() {
 }
 
 function notFound(name: string): ReactNode {
+  const hint = suggest(
+    name,
+    commands.filter((command) => !command.hidden).map((command) => command.name),
+  );
   return (
     <div className="text-muted">
-      command not found: <span className="text-fg">{name}</span> — try{" "}
-      <span className="text-amber">help</span>
+      command not found: <span className="text-fg">{name}</span>
+      {hint ? (
+        <>
+          {" "}
+          — did you mean <span className="text-amber">{hint}</span>?
+        </>
+      ) : (
+        <>
+          {" "}
+          — try <span className="text-amber">help</span>
+        </>
+      )}
     </div>
   );
 }
@@ -123,6 +138,12 @@ export function Shell() {
         className="min-h-0 flex-1 overflow-y-auto px-5 py-5"
         onClick={() => inputRef.current?.focus()}
       >
+        {transcript.length === 0 && (
+          <div className="mb-3 text-dim">
+            type a command or tap a chip below — start with{" "}
+            <span className="text-amber">help</span>
+          </div>
+        )}
         {transcript.map((entry) => (
           <div key={entry.id} className="mb-2">
             <div className="flex">
@@ -134,19 +155,26 @@ export function Shell() {
         ))}
         <div className="flex">
           <Prompt />
-          <input
-            ref={inputRef}
-            aria-label="terminal input"
-            className="caret-amber min-w-0 flex-1 bg-transparent text-fg outline-none"
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            onKeyDown={onKeyDown}
-            autoFocus
-            autoComplete="off"
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck={false}
-          />
+          <div className="relative min-w-0 flex-1">
+            <span className="whitespace-pre-wrap break-words text-fg">{value}</span>
+            <span
+              aria-hidden="true"
+              className="terminal-cursor ml-0.5 inline-block h-[1em] w-[0.5em] translate-y-[0.15em] bg-amber"
+            />
+            <input
+              ref={inputRef}
+              aria-label="terminal input"
+              className="absolute inset-0 h-full w-full bg-transparent text-transparent caret-transparent outline-none"
+              value={value}
+              onChange={(event) => setValue(event.target.value)}
+              onKeyDown={onKeyDown}
+              autoFocus
+              autoComplete="off"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+            />
+          </div>
         </div>
         <div ref={endRef} />
       </div>

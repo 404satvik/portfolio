@@ -8,7 +8,9 @@ interface ChipBarProps {
 export function ChipBar({ commands, onRun }: ChipBarProps) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      {commands.map((command) => (
+      {commands
+        .filter((command) => !command.hidden)
+        .map((command) => (
         <button
           key={command.name}
           type="button"

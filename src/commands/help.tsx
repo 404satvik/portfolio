@@ -7,7 +7,9 @@ export const help: Command = {
     <div>
       <div className="text-muted">available commands — type or click:</div>
       <div className="mt-1 grid gap-0.5">
-        {ctx.commands.map((command) => (
+        {ctx.commands
+          .filter((command) => !command.hidden)
+          .map((command) => (
           <div key={command.name}>
             <span className="text-amber">{command.name}</span>
             <span className="text-dim"> — {command.description}</span>

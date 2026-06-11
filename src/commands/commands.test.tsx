@@ -32,7 +32,7 @@ describe("whoami", () => {
 describe("help", () => {
   it("lists every registered command name", () => {
     const { container } = render(<>{help.run([], makeContext())}</>);
-    for (const command of commands) {
+    for (const command of commands.filter((command) => !command.hidden)) {
       expect(container).toHaveTextContent(command.name);
     }
   });

@@ -9,5 +9,6 @@ export interface CommandContext {
 export interface Command {
   name: string;
   description: string;
+  hidden?: boolean;
   run: (args: string[], ctx: CommandContext) => ReactNode;
 }

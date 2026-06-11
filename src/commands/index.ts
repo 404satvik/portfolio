@@ -5,6 +5,7 @@ import { projects } from "./projects";
 import { learning } from "./learning";
 import { skills } from "./skills";
 import { connect } from "./connect";
+import { neofetch } from "./neofetch";
 import { clear } from "./clear";
 
 export const commands: Command[] = [
@@ -14,6 +15,7 @@ export const commands: Command[] = [
   learning,
   skills,
   connect,
+  neofetch,
   clear,
 ];
 

@@ -31,6 +31,15 @@ describe("Shell", () => {
     expect(screen.queryByText(/machine learning/i)).not.toBeInTheDocument();
   });
 
+  it("suggests a correction for a near-miss command", async () => {
+    const user = userEvent.setup();
+    render(<Shell />);
+    await user.type(input(), "porjects{Enter}");
+    const message = screen.getByText(/command not found/i);
+    expect(message).toHaveTextContent(/did you mean/i);
+    expect(message).toHaveTextContent("projects");
+  });
+
   it("recalls the previous command with arrow up", async () => {
     const user = userEvent.setup();
     render(<Shell />);
