@@ -41,7 +41,7 @@ export function SessionSelect({ onSelect }: SessionSelectProps) {
   }, [index, onSelect]);
 
   return (
-    <div className="h-full p-5 text-sm leading-relaxed">
+    <div className="h-full p-6 text-[15px] leading-7">
       <div className="mb-1">
         <span className="text-amber">[ ok ]</span>{" "}
         <span className="text-muted">ready</span>

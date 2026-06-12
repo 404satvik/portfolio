@@ -48,7 +48,7 @@ export function Boot({ onDone, lines = defaultLines, lineDelay = 220 }: BootProp
 
   return (
     <div
-      className="h-full p-5 text-sm leading-relaxed"
+      className="h-full p-6 text-[15px] leading-7"
       onClick={finish}
       role="presentation"
     >

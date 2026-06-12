@@ -11,13 +11,13 @@ type Phase = "boot" | "select" | "ready";
 
 function Frame({ children, headerRight }: { children: ReactNode; headerRight?: ReactNode }) {
   return (
-    <main className="flex min-h-full items-center justify-center p-4">
-      <section className="flex h-[80vh] max-h-[640px] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-amber/20">
-        <header className="flex items-center gap-2 border-b border-white/5 bg-white/[0.02] px-4 py-2.5">
-          <span className="size-2.5 rounded-full bg-amber" />
-          <span className="size-2.5 rounded-full bg-white/15" />
-          <span className="size-2.5 rounded-full bg-white/15" />
-          <span className="ml-2 text-xs text-dim">satvik.os — bash</span>
+    <main className="flex min-h-full items-center justify-center p-4 sm:p-6">
+      <section className="flex h-[85vh] max-h-[760px] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-amber/20 shadow-2xl shadow-black/50 ring-1 ring-black/40">
+        <header className="flex items-center gap-2 border-b border-white/5 bg-white/[0.03] px-4 py-3">
+          <span className="size-3 rounded-full bg-amber" />
+          <span className="size-3 rounded-full bg-white/15" />
+          <span className="size-3 rounded-full bg-white/15" />
+          <span className="ml-2 text-[13px] text-dim">satvik.os — bash</span>
           {headerRight && <div className="ml-auto">{headerRight}</div>}
         </header>
         <div className="min-h-0 flex-1 bg-surface">{children}</div>

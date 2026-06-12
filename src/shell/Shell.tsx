@@ -133,9 +133,9 @@ export function Shell() {
   }
 
   return (
-    <div className="flex h-full flex-col text-sm leading-relaxed">
+    <div className="flex h-full flex-col text-[15px] leading-7">
       <div
-        className="min-h-0 flex-1 overflow-y-auto px-5 py-5"
+        className="min-h-0 flex-1 overflow-y-auto px-6 py-6"
         onClick={() => inputRef.current?.focus()}
       >
         {transcript.length === 0 && (
@@ -179,7 +179,7 @@ export function Shell() {
         <div ref={endRef} />
       </div>
 
-      <div className="border-t border-white/5 px-5 py-3">
+      <div className="border-t border-white/5 px-6 py-4">
         <ChipBar commands={commands} onRun={submitFromChip} />
       </div>
     </div>

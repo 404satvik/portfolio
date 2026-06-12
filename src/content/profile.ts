@@ -8,6 +8,6 @@ export interface Profile {
 export const profile: Profile = {
   name: "satvik",
   age: 19,
-  role: "cs, year 2",
+  role: "computer science major · year 2",
   tagline: "focused on ai & machine learning",
 };
