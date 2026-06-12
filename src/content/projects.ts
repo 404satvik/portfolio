@@ -8,7 +8,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     name: "satvik.os",
-    blurb: "this site — a terminal you can actually talk to",
+    blurb: "my personal portfolio — designed and built from scratch",
     tech: ["react", "typescript", "tailwind"],
     link: "https://github.com/404satvik/portfolio",
   },

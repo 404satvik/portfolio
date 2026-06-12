@@ -42,6 +42,32 @@ export function StandardPage({ onEnterTerminal }: StandardPageProps) {
             {profile.age} · {profile.role}
           </p>
           <p className="mt-1 text-lg text-amber">{profile.tagline}</p>
+          <div className="mt-8">
+            <a
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-amber/40 bg-amber/[0.06] px-4 py-2 text-amber transition-colors hover:bg-amber/[0.14]"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6" />
+                <path d="M16 13H8" />
+                <path d="M16 17H8" />
+                <path d="M10 9H8" />
+              </svg>
+              resume ↗
+            </a>
+          </div>
         </header>
 
         <Section title="projects">

@@ -3,11 +3,8 @@ import type { ReactNode } from "react";
 import { Shell } from "./shell/Shell";
 import { StandardPage } from "./standard/StandardPage";
 import { Boot } from "./boot/Boot";
-import { SessionSelect } from "./session/SessionSelect";
 import { getMode, setMode, hasBooted, markBooted } from "./lib/storage";
 import type { Mode } from "./lib/storage";
-
-type Phase = "boot" | "select" | "ready";
 
 function Frame({ children, headerRight }: { children: ReactNode; headerRight?: ReactNode }) {
   return (
@@ -27,32 +24,32 @@ function Frame({ children, headerRight }: { children: ReactNode; headerRight?: R
 }
 
 export default function App() {
-  const [phase, setPhase] = useState<Phase>(() => (hasBooted() ? "ready" : "boot"));
-  const [mode, setModeState] = useState<Mode>(() => getMode() ?? "terminal");
+  const [mode, setModeState] = useState<Mode>(() => getMode() ?? "standard");
+  const [booting, setBooting] = useState(false);
 
   function changeMode(next: Mode) {
     setModeState(next);
     setMode(next);
   }
 
-  function chooseSession(next: Mode) {
+  function enterTerminal() {
+    if (hasBooted()) {
+      changeMode("terminal");
+    } else {
+      setBooting(true);
+    }
+  }
+
+  function finishBoot() {
     markBooted();
-    changeMode(next);
-    setPhase("ready");
+    setBooting(false);
+    changeMode("terminal");
   }
 
-  if (phase === "boot") {
+  if (booting) {
     return (
       <Frame>
-        <Boot onDone={() => setPhase("select")} />
-      </Frame>
-    );
-  }
-
-  if (phase === "select") {
-    return (
-      <Frame>
-        <SessionSelect onSelect={chooseSession} />
+        <Boot onDone={finishBoot} />
       </Frame>
     );
   }
@@ -60,7 +57,7 @@ export default function App() {
   if (mode === "standard") {
     return (
       <main className="min-h-full">
-        <StandardPage onEnterTerminal={() => changeMode("terminal")} />
+        <StandardPage onEnterTerminal={enterTerminal} />
       </main>
     );
   }

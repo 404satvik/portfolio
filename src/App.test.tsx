@@ -6,53 +6,54 @@ import { getMode, setMode, markBooted, hasBooted } from "./lib/storage";
 
 beforeEach(() => localStorage.clear());
 
-describe("returning visitor", () => {
-  beforeEach(() => {
+describe("default landing", () => {
+  it("lands on the standard portfolio for a new visitor", () => {
+    render(<App />);
+    expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+  });
+
+  it("returns a saved terminal user straight to the terminal", () => {
     markBooted();
     setMode("terminal");
-  });
-
-  it("goes straight to the saved terminal, no boot", () => {
     render(<App />);
     expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.queryByText(/select session/i)).not.toBeInTheDocument();
   });
+});
 
-  it("switches to standard mode and remembers the choice", async () => {
+describe("entering the terminal", () => {
+  it("plays the boot the first time, then shows the terminal", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole("button", { name: /standard mode/i }));
-    expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
-    expect(getMode()).toBe("standard");
+    await user.click(screen.getByRole("button", { name: /terminal mode/i }));
+    await waitFor(() => expect(screen.getByRole("textbox")).toBeInTheDocument(), {
+      timeout: 3000,
+    });
+    expect(getMode()).toBe("terminal");
+    expect(hasBooted()).toBe(true);
   });
 
-  it("switches back to the terminal", async () => {
+  it("skips the boot once it has booted before", async () => {
+    markBooted();
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole("button", { name: /standard mode/i }));
     await user.click(screen.getByRole("button", { name: /terminal mode/i }));
     expect(screen.getByRole("textbox")).toBeInTheDocument();
     expect(getMode()).toBe("terminal");
   });
 });
 
-describe("first visit", () => {
-  it("boots, then shows the session chooser", async () => {
-    render(<App />);
-    await waitFor(() => expect(screen.getByText(/select session/i)).toBeInTheDocument(), {
-      timeout: 3000,
-    });
+describe("switching back to standard", () => {
+  beforeEach(() => {
+    markBooted();
+    setMode("terminal");
   });
 
-  it("launches the chosen session and remembers it", async () => {
+  it("returns to standard and remembers it", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await waitFor(() => expect(screen.getByText(/select session/i)).toBeInTheDocument(), {
-      timeout: 3000,
-    });
-    await user.click(screen.getByRole("button", { name: /standard/i }));
+    await user.click(screen.getByRole("button", { name: /standard mode/i }));
     expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
     expect(getMode()).toBe("standard");
-    expect(hasBooted()).toBe(true);
   });
 });

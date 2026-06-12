@@ -3,6 +3,7 @@ export interface Profile {
   age: number;
   role: string;
   tagline: string;
+  resumeUrl: string;
 }
 
 export const profile: Profile = {
@@ -10,4 +11,5 @@ export const profile: Profile = {
   age: 19,
   role: "computer science major · year 2",
   tagline: "focused on ai & machine learning",
+  resumeUrl: "/resume.pdf",
 };
