@@ -12,7 +12,7 @@ export const connect: Command = {
           href={link.url}
           target={link.url.startsWith("mailto:") ? undefined : "_blank"}
           rel="noreferrer"
-          className="text-muted underline-offset-2 hover:text-amber hover:underline"
+          className="break-all text-muted underline-offset-2 hover:text-amber hover:underline"
         >
           <span className="text-amber">{link.label}</span> →{" "}
           {link.url.replace(/^mailto:/, "")}
