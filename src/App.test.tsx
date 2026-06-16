@@ -2,22 +2,22 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
-import { getMode, setMode, markBooted, hasBooted } from "./lib/storage";
+import { markBooted, hasBooted } from "./lib/storage";
 
 beforeEach(() => localStorage.clear());
 
-describe("default landing", () => {
-  it("lands on the standard portfolio for a new visitor", () => {
+describe("landing", () => {
+  it("always lands on the standard portfolio", () => {
     render(<App />);
     expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it("returns a saved terminal user straight to the terminal", () => {
-    markBooted();
-    setMode("terminal");
+  it("lands on standard even if a terminal preference was saved", () => {
+    localStorage.setItem("satvik.os:mode", "terminal");
     render(<App />);
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 });
 
@@ -29,7 +29,6 @@ describe("entering the terminal", () => {
     await waitFor(() => expect(screen.getByRole("textbox")).toBeInTheDocument(), {
       timeout: 3000,
     });
-    expect(getMode()).toBe("terminal");
     expect(hasBooted()).toBe(true);
   });
 
@@ -39,21 +38,15 @@ describe("entering the terminal", () => {
     render(<App />);
     await user.click(screen.getByRole("button", { name: /terminal mode/i }));
     expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(getMode()).toBe("terminal");
   });
-});
 
-describe("switching back to standard", () => {
-  beforeEach(() => {
+  it("can return to standard from the terminal", async () => {
     markBooted();
-    setMode("terminal");
-  });
-
-  it("returns to standard and remembers it", async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole("button", { name: /terminal mode/i }));
+    expect(screen.getByRole("textbox")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /standard mode/i }));
     expect(screen.getByRole("heading", { name: /satvik/i })).toBeInTheDocument();
-    expect(getMode()).toBe("standard");
   });
 });

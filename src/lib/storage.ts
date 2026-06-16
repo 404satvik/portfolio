@@ -1,6 +1,5 @@
 export type Mode = "terminal" | "standard";
 
-const MODE_KEY = "satvik.os:mode";
 const BOOT_KEY = "satvik.os:booted";
 
 function read(key: string): string | null {
@@ -17,15 +16,6 @@ function write(key: string, value: string): void {
   } catch {
     return;
   }
-}
-
-export function getMode(): Mode | null {
-  const value = read(MODE_KEY);
-  return value === "terminal" || value === "standard" ? value : null;
-}
-
-export function setMode(mode: Mode): void {
-  write(MODE_KEY, mode);
 }
 
 export function hasBooted(): boolean {

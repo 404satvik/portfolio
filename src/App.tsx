@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Shell } from "./shell/Shell";
 import { StandardPage } from "./standard/StandardPage";
 import { Boot } from "./boot/Boot";
-import { getMode, setMode, hasBooted, markBooted } from "./lib/storage";
+import { hasBooted, markBooted } from "./lib/storage";
 import type { Mode } from "./lib/storage";
 
 function Frame({ children, headerRight }: { children: ReactNode; headerRight?: ReactNode }) {
@@ -24,17 +24,12 @@ function Frame({ children, headerRight }: { children: ReactNode; headerRight?: R
 }
 
 export default function App() {
-  const [mode, setModeState] = useState<Mode>(() => getMode() ?? "standard");
+  const [mode, setMode] = useState<Mode>("standard");
   const [booting, setBooting] = useState(false);
-
-  function changeMode(next: Mode) {
-    setModeState(next);
-    setMode(next);
-  }
 
   function enterTerminal() {
     if (hasBooted()) {
-      changeMode("terminal");
+      setMode("terminal");
     } else {
       setBooting(true);
     }
@@ -43,7 +38,7 @@ export default function App() {
   function finishBoot() {
     markBooted();
     setBooting(false);
-    changeMode("terminal");
+    setMode("terminal");
   }
 
   if (booting) {
@@ -67,7 +62,7 @@ export default function App() {
       headerRight={
         <button
           type="button"
-          onClick={() => changeMode("standard")}
+          onClick={() => setMode("standard")}
           className="text-xs text-dim transition-colors hover:text-amber"
         >
           standard mode ↗
