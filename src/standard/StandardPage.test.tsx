@@ -7,6 +7,7 @@ import { projects } from "../content/projects";
 import { learning } from "../content/learning";
 import { skillGroups } from "../content/skills";
 import { connectLinks } from "../content/connect";
+import { posts } from "../content/posts";
 
 describe("StandardPage", () => {
   it("shows the profile identity", () => {
@@ -33,6 +34,16 @@ describe("StandardPage", () => {
       const anchor = screen.getByRole("link", { name: new RegExp(link.label, "i") });
       expect(anchor).toHaveAttribute("href", link.url);
     }
+  });
+
+  it("lists posts and expands one when its title is clicked", async () => {
+    const user = userEvent.setup();
+    render(<StandardPage onEnterTerminal={vi.fn()} />);
+    for (const post of posts) {
+      expect(screen.getByText(post.title)).toBeInTheDocument();
+    }
+    await user.click(screen.getByText(posts[0].title));
+    expect(screen.getByText(/living log/i)).toBeInTheDocument();
   });
 
   it("can switch to the terminal", async () => {

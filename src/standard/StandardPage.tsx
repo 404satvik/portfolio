@@ -1,10 +1,13 @@
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { BrandIcon } from "./BrandIcon";
+import { Markdown } from "../components/Markdown";
 import { profile } from "../content/profile";
 import { projects } from "../content/projects";
 import { learning } from "../content/learning";
 import { skillGroups } from "../content/skills";
 import { connectLinks } from "../content/connect";
+import { posts } from "../content/posts";
 
 interface StandardPageProps {
   onEnterTerminal: () => void;
@@ -20,6 +23,8 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 export function StandardPage({ onEnterTerminal }: StandardPageProps) {
+  const [openPost, setOpenPost] = useState<string | null>(null);
+
   return (
     <div className="h-full overflow-y-auto text-base">
       <div className="sticky top-0 z-10 border-b border-white/5 bg-bg/80 backdrop-blur-sm">
@@ -114,6 +119,30 @@ export function StandardPage({ onEnterTerminal }: StandardPageProps) {
               <div key={group.label} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
                 <span className="w-32 shrink-0 text-dim">{group.label}</span>
                 <span className="text-muted">{group.items.join(" · ")}</span>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section title="writing">
+          <div className="grid gap-4">
+            {posts.map((post) => (
+              <div key={post.slug}>
+                <button
+                  type="button"
+                  onClick={() => setOpenPost(openPost === post.slug ? null : post.slug)}
+                  className="flex w-full items-baseline gap-3 text-left"
+                >
+                  <span className="shrink-0 text-sm text-dim">{post.date}</span>
+                  <span className="text-fg transition-colors hover:text-amber">
+                    {post.title}
+                  </span>
+                </button>
+                {openPost === post.slug && (
+                  <div className="mt-3 border-l border-white/10 pl-4">
+                    <Markdown>{post.body}</Markdown>
+                  </div>
+                )}
               </div>
             ))}
           </div>
